@@ -1,0 +1,44 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories
+vendor/
+
+# Binary compiled files
+bin/
+
+# Temporary files
+.tmp/
+tmp/
+
+# Go generated files
+*.pb.go
+*.test.go
+
+# Air temporary files
+.tmp-air
+
+# Log files
+*.log
+
+# Mac OS X system files
+.DS_Store
+
+# Editor-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment-specific files
+.env
