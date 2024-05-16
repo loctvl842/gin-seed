@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"gin-seed/gosdk"
-	"gin-seed/machine/server"
+	"app/gosdk"
+	"app/machine/server"
 	"log"
 	"os"
 

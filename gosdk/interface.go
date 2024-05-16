@@ -1,7 +1,7 @@
 package gosdk
 
 import (
-	"gin-seed/machine/logger"
+	"app/machine/logger"
 )
 
 type Option func(*application)

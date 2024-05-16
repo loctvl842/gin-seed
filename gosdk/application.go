@@ -1,10 +1,10 @@
 package gosdk
 
 import (
+	"app/constant"
+	"app/machine/logger"
 	"flag"
 	"fmt"
-	"gin-seed/constant"
-	"gin-seed/machine/logger"
 	"log"
 	"os"
 	"os/signal"

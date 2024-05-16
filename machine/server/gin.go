@@ -1,12 +1,12 @@
 package server
 
 import (
+	"app/gosdk"
+	"app/machine/logger"
+	"app/routers/middleware"
+	router_v1 "app/routers/v1"
+	"app/utils"
 	"flag"
-	"gin-seed/gosdk"
-	"gin-seed/machine/logger"
-	"gin-seed/routers/middleware"
-	router_v1 "gin-seed/routers/v1"
-	"gin-seed/utils"
 
 	"github.com/gin-gonic/gin"
 )
