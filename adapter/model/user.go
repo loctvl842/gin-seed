@@ -1,9 +1,9 @@
 package model
 
-import "gorm.io/gorm"
+import "app/adapter/core"
 
-type Person struct {
-	gorm.Model
+type User struct {
+	core.BaseModel
 	ID   uint   `json:"id" gorm:"primaryKey"`
 	Name string `json:"name"`
 }

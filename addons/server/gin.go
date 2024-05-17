@@ -11,7 +11,11 @@ import (
 	"net/http"
 	"time"
 
+	_ "app/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type ServerGinOpt struct {
@@ -119,6 +123,7 @@ func (s *GinServer) Group(relativePath string, handlers ...gin.HandlerFunc) *gin
 }
 
 func (s *GinServer) ListenAndServe() error {
+	s.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	s.httpServer.Handler = s.engine
 	if err := s.httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		return err

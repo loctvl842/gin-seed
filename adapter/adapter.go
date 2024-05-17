@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"app/adapter/core"
 	router_v1 "app/adapter/routers/v1"
 	"app/addons"
 	"app/addons/logger"
@@ -9,23 +10,25 @@ import (
 )
 
 type adapter struct {
-	appCtx gosdk.ApplicationContext
-	logger logger.Logger
+	service *core.AdapterService
 }
 
 func NewAdapter(appCtx gosdk.ApplicationContext) *adapter {
 	return &adapter{
-		appCtx: appCtx,
-		logger: logger.GetCurrent().GetLogger("adapter"),
+		service: &core.AdapterService{
+			AppCtx: appCtx,
+			Logger: logger.GetCurrent().GetLogger("adapter"),
+		},
 	}
 }
 
 func (s *adapter) Start() {
-	gs := s.appCtx.MustGet(string(addons.GinServerPrefix)).(*server.GinServer)
+	gs := s.service.AppCtx.MustGet(string(addons.GinServerPrefix)).(*server.GinServer)
 
-	router_v1.RegisterRoutes(gs.Group("v1"))
+	// Organize the routes by version
+	router_v1.RegisterRoutes(gs.Group("v1"), s.service)
 
 	if err := gs.ListenAndServe(); err != nil {
-		s.logger.Fatalln(err)
+		s.service.Logger.Fatalln(err)
 	}
 }

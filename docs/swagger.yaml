@@ -1,0 +1,21 @@
+info:
+  contact: {}
+paths:
+  /v1/external/users:
+    post:
+      consumes:
+      - application/json
+      description: Create Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: List users
+      tags:
+      - users
+swagger: "2.0"
