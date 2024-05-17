@@ -1,13 +1,14 @@
 package gosdk
 
 import (
+	"app/addons/logger"
 	"app/constant"
-	"app/machine/logger"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 
 	"github.com/joho/godotenv"
@@ -44,15 +45,15 @@ func (s *application) IsRegistered() bool {
 	return s.isRegister
 }
 
-func (s *application) run() <-chan error {
-	c := make(chan error, 1)
-
-	return c
-}
-
 func (s *application) Start() error {
 	signal.Notify(s.signalChan, os.Interrupt)
-	c := s.run()
+
+	c := make(chan error, 1)
+
+	// Run all sub services
+	for _, sv := range s.subServices {
+		go func(r Runnable) { c <- r.Run() }(sv)
+	}
 
 	for {
 		select {
@@ -68,9 +69,11 @@ func (s *application) Start() error {
 				return nil
 			case syscall.SIGTERM:
 				fmt.Println("Received SIGTERM, exiting")
+				s.Stop()
 				return nil
 			case syscall.SIGINT:
 				fmt.Println("Received SIGINT, exiting")
+				s.Stop()
 				return nil
 			default:
 				fmt.Println("Received signal: ", sig)
@@ -82,6 +85,27 @@ func (s *application) Start() error {
 }
 
 func (s *application) Stop() {
+	s.logger.Infoln("Stopping addons...")
+	var wg sync.WaitGroup
+
+	stop := func(r Runnable) {
+		defer wg.Done()
+		<-r.Stop()
+	}
+	wg.Add(len(s.subServices) + len(s.initServices))
+
+	// Stop all sub services
+	for _, sv := range s.subServices {
+		go stop(sv)
+	}
+
+	// Stop all init services
+	for _, sv := range s.initServices {
+		go stop(sv)
+	}
+
+	wg.Wait()
+	s.logger.Info("All addons are stopped")
 }
 
 func (s *application) OutEnv() {
@@ -187,4 +211,9 @@ func WithInitRunnable(r PrefixRunnable) Option {
 
 		s.initServices[r.GetPrefix()] = r
 	}
+}
+
+// Add sub service to SDK
+func WithRunnable(r Runnable) Option {
+	return func(s *application) { s.subServices = append(s.subServices, r) }
 }

@@ -1,7 +1,7 @@
 package gosdk
 
 import (
-	"app/machine/logger"
+	"app/addons/logger"
 )
 
 type Option func(*application)

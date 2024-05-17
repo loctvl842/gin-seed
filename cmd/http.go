@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"app/adapter"
+	"app/addons"
+	"app/addons/database"
+	"app/addons/server"
 	"app/gosdk"
-	"app/machine/server"
 	"log"
 	"os"
 
@@ -13,7 +16,8 @@ func newApp() gosdk.Application {
 	return gosdk.New(
 		gosdk.WithName("gin-seed"),
 		gosdk.WithVersion("0.0.1"),
-		gosdk.WithInitRunnable(server.NewGinServer("gin-server", "gin")),
+		gosdk.WithInitRunnable(server.NewGinServer(addons.GinServerName, addons.GinServerPrefix)),
+		gosdk.WithInitRunnable(database.NewPgDatabase(addons.PgDatabaseName, addons.PgDatabasePrefix)),
 	)
 }
 
@@ -28,9 +32,12 @@ var startServer = &cobra.Command{
 			serviceLogger.Fatalln(err)
 		}
 
+		adapter.NewAdapter(app).Start()
+
 		if err := app.Start(); err != nil {
 			serviceLogger.Fatalln(err)
 		}
+
 	},
 }
 

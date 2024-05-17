@@ -1,8 +1,8 @@
 package router_v1
 
 import (
-	"app/routers/v1/external"
-	"app/routers/v1/internal"
+	"app/adapter/routers/v1/external"
+	"app/adapter/routers/v1/internal"
 
 	"github.com/gin-gonic/gin"
 )
