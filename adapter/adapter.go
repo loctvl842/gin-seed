@@ -7,6 +7,8 @@ import (
 	"app/addons/logger"
 	"app/addons/server"
 	"app/gosdk"
+
+	_ "ariga.io/atlas-provider-gorm/gormschema"
 )
 
 type adapter struct {
