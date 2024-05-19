@@ -46,37 +46,24 @@ watch: ## Start development server with hot reload
 
 .PHONY: watch
 start-dev:
-	$(eval include .env)
-	$(eval export $(sh sed 's/=.*//' .env))
 	air
 
 .PHONY: start
 start:
-	$(eval include .env)
-	$(eval export $(sh sed 's/=.*//' .env))
 	go run main.go
 
 # Database commands
 
 .PHONY: migrate
 migrate: ## Run the migrations
-	$(eval include .env)
-	$(eval export $(sh sed 's/=.*//' .env))
-
 	atlas migrate apply --env gorm
 
 .PHONY: rollback
 rollback: ## Rollback the migrations
-	$(eval include .env)
-	$(eval export $(sh sed 's/=.*//' .env))
-
 	atlas migrate down --env gorm
 
 .PHONY: generate-migration
 generate-migration: ## Generate a new migration
-	$(eval include .env)
-	$(eval export $(sh sed 's/=.*//' .env))
-
 	@printf "\033[33mEnter migration message: \033[0m"
 	@read -r message; \
 	atlas migrate diff --env gorm $$message
