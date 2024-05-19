@@ -1,0 +1,26 @@
+services:
+  app:
+    image: loctvl842/gin-seed
+    container_name: gin-seed
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    env_file:
+      - ../.env
+    network_mode: "host"
+
+  postgres:
+    image: postgres
+    container_name: gin-seed-postgres
+    hostname: database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: thangcho
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+    external: true
+    name: pgdata
