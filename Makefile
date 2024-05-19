@@ -36,6 +36,10 @@ options:
 
 # Makefile commands
 
+.PHONY: setup
+setup: ## Setup development prerequisites
+	./setup.sh
+
 .PHONY: run
 run:  ## Start server
 	@make start
